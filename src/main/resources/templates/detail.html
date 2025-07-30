@@ -8,21 +8,25 @@
 </head>
 <body class="bg-dark text-white">
   <div class="container mt-5">
-    <h2 class="text-success" th:text="${performance.title}"></h2>
-	
-	<!-- 公演詳細ページの一部に追記（ログイン中のユーザー向け） -->
-	<div th:if="${loginStatus.loggedIn}">
-	  <form th:action="@{${isFavorited} ? '/favorite/remove/' + ${performance.id} : '/favorite/add/' + ${performance.id}}" method="post">
-	    <button type="submit" class="btn" th:classappend="${isFavorited} ? 'btn-danger' : 'btn-outline-success'">
-	      <span th:text="${isFavorited} ? 'お気に入り解除' : 'お気に入り登録'"></span>
-	    </button>
-	  </form>
-	</div>
+    <h2 class="text-success mb-4" th:text="${performance.title}">公演タイトル</h2>
 
-    <p><strong>劇場:</strong> <span th:text="${performance.theater}"></span></p>
-    <p><strong>日付:</strong> <span th:text="${performance.date}"></span></p>
-    <p><strong>時間:</strong> <span th:text="${performance.time}"></span></p>
-    <p><strong>出演:</strong> <span th:text="${performance.cast}"></span></p>
+    <!-- お気に入りボタン：ログインユーザーのみ表示 -->
+    <div th:if="${loginStatus.loggedIn}">
+      <form th:action="@{${isFavorited} ? '/favorite/remove/' + ${performance.id} : '/favorite/add/' + ${performance.id}}" method="post">
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}" /> <!-- CSRF対策 -->
+        <button type="submit"
+                class="btn mb-4"
+                th:classappend="${isFavorited} ? 'btn-danger' : 'btn-outline-success'">
+          <i class="bi" th:classappend="${isFavorited} ? 'bi-heart-fill' : 'bi-heart'"></i>
+          <span th:text="${isFavorited} ? ' お気に入り解除' : ' お気に入り登録'"></span>
+        </button>
+      </form>
+    </div>
+
+    <p><strong>劇場:</strong> <span th:text="${performance.theater}">劇場名</span></p>
+    <p><strong>日付:</strong> <span th:text="${performance.date}">YYYY-MM-DD</span></p>
+    <p><strong>時間:</strong> <span th:text="${performance.time}">HH:mm</span></p>
+    <p><strong>出演:</strong> <span th:text="${performance.cast}">配役</span></p>
 
     <div class="mt-4">
       <div th:if="${performance.youtubeUrl != null}">
@@ -35,5 +39,16 @@
       </div>
     </div>
   </div>
+  
+<!--  テスト-->
+<div>
+  <form th:action="@{'/favorite/add/' + ${performance.id}}" method="post">
+    <button type="submit" class="btn btn-outline-success">お気に入り登録</button>
+  </form>
+</div>
+<!--テスト終-->
+
+  <!-- Bootstrap Icons CDN（ハートアイコン用）-->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 </body>
 </html>
