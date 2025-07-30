@@ -5,9 +5,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import com.example.app.login.UserService;
 
@@ -15,34 +15,30 @@ import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
+@RequiredArgsConstructor // Lombokでコンストラクタインジェクション
 public class WebSecurityConfig {
 
     private final UserService userService;
+ // 作成したSuccessHandlerをインジェクション
+    private final AuthenticationSuccessHandler successHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
-                .requestMatchers("/login", "/error").permitAll()
-                .requestMatchers("/admin/**").hasRole("ADMIN")
-                .requestMatchers("/calendar/**", "/performance/**", "/favorites/**").hasAnyRole("USER", "ADMIN")
-                .anyRequest().authenticated()
-            )
-            .formLogin(form -> form
+    	http.formLogin(login -> login
                 .loginPage("/login")
-                .defaultSuccessUrl("/calendar", true)
+                .loginProcessingUrl("/login")
+                .successHandler(successHandler) // ここでSuccessHandlerを適用
                 .failureUrl("/login_error")
                 .permitAll()
-            )
-            .logout(logout -> logout
-                .logoutSuccessUrl("/login?logout")
-                .permitAll()
-            )
-            .authenticationProvider(daoAuthenticationProvider()) // ★ 自作Providerを登録
-            .csrf(AbstractHttpConfigurer::disable)
-            .build();
+        ).logout(logout -> logout
+                .logoutSuccessUrl("/logout_success")
+        ).authorizeHttpRequests(authz -> authz
+                // 管理者向けページへのアクセスはADMIN権限のみに制限
+                .requestMatchers("/admin", "/admin/**").hasRole("ADMIN")
+                // その他のURLは認証済みユーザーなら誰でもアクセス可能
+                .anyRequest().authenticated()
+        );
+        return http.build();
     }
 
     @Bean
