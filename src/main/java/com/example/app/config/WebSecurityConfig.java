@@ -33,7 +33,7 @@ public class WebSecurityConfig {
             .formLogin(form -> form
                 .loginPage("/login")
                 .defaultSuccessUrl("/calendar", true)
-                .failureUrl("/login-error")
+                .failureUrl("/login_error")
                 .permitAll()
             )
             .logout(logout -> logout
