@@ -1,5 +1,6 @@
 package com.example.app.config;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -49,9 +50,11 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public DaoAuthenticationProvider authProvider(UserDetailsService userDetailsService) {
+    public DaoAuthenticationProvider authProvider(
+            @Qualifier("userDetailsServiceImpl") UserDetailsService userDetailsService) {
+        
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userService);
+        authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
