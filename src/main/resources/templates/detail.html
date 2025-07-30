@@ -9,6 +9,17 @@
 <body class="bg-dark text-white">
   <div class="container mt-5">
     <h2 class="text-success" th:text="${performance.title}"></h2>
+	
+	<!-- 公演詳細ページの一部に追記（ログイン中のユーザー向け） -->
+	<div th:if="${session.loginStatus != null and session.loginStatus.role == 'USER'}" class="mt-3">
+	  <form th:action="@{/favorites/__${isFavorite}__}" method="post">
+	    <input type="hidden" name="performanceId" th:value="${performance.id}">
+	    <button type="submit"
+	            th:text="${isFavorite} == 'remove' ? 'お気に入り解除' : 'お気に入りに追加'}"
+	            class="btn btn-outline-success"></button>
+	  </form>
+	</div>
+
     <p><strong>劇場:</strong> <span th:text="${performance.theater}"></span></p>
     <p><strong>日付:</strong> <span th:text="${performance.date}"></span></p>
     <p><strong>時間:</strong> <span th:text="${performance.time}"></span></p>
