@@ -8,6 +8,6 @@ public class AdminController {
 
     @GetMapping("/admin")
     public String adminHome() {
-        return "admin/home"; // templates/admin/home.html に遷移
+        return "admin/home"; // templates/admin/home.html に遷移←は削除
     }
 }
