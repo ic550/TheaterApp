@@ -9,6 +9,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
+import com.example.app.domain.Favorite;
+
 @Mapper
 public interface FavoriteMapper {
 
@@ -20,4 +22,10 @@ public interface FavoriteMapper {
 
     @Select("SELECT performance_id FROM favorites WHERE user_id = #{userId}")
     List<Integer> getFavoriteIds(int userId);
+    
+    @Select("SELECT * FROM favorites WHERE user_id = #{userId}")
+    List<Favorite> findByUserId(@Param("userId") int userId);
+
+    @Select("SELECT COUNT(*) > 0 FROM favorites WHERE user_id = #{userId} AND performance_id = #{performanceId}")
+    boolean isFavorited(@Param("userId") int userId, @Param("performanceId") int performanceId);
 }

@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.app.domain.Performance;
+import com.example.app.login.LoginStatus;
+import com.example.app.service.FavoriteService;
 import com.example.app.service.PerformanceService;
 
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,8 @@ import lombok.RequiredArgsConstructor;
 public class PerformanceController {
 
     private final PerformanceService performanceService;
+    private final FavoriteService favoriteService;
+    private final LoginStatus loginStatus;  // ← 追加！！
 
     // 指定日の一覧を返す（ユーザー画面）
     @GetMapping("/list")
@@ -39,12 +43,7 @@ public class PerformanceController {
     }
 
     // 詳細ページ（動画あり・なし対応）
-    @GetMapping("/detail/{id}")
-    public String detail(@PathVariable int id, Model model) {
-        Performance perf = performanceService.getById(id);
-        model.addAttribute("performance", perf);
-        return "detail";
-    }
+
 
     // 管理者画面（全件表示）
     @GetMapping("/admin")
@@ -92,6 +91,19 @@ public class PerformanceController {
         return "calendar";
     }
 
- 
+    @GetMapping("/detail/{id}")
+    public String detail(@PathVariable int id, Model model) {
+        Performance perf = performanceService.getById(id);
+        model.addAttribute("performance", perf);
+        
+        model.addAttribute("loginStatus", loginStatus);  // ← 追加
+
+        if (loginStatus.isLoggedIn()) {
+            boolean isFav = favoriteService.isFavorited(loginStatus.getId(), id);
+            model.addAttribute("isFavorited", isFav);
+        }
+
+        return "detail";
+    }
 
 }
