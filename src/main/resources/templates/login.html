@@ -9,7 +9,7 @@
 <body class="bg-dark text-white">
   <div class="container mt-5">
     <h2 class="text-center text-success">ログイン</h2>
-    <form method="post" action="/login" class="mx-auto" style="max-width: 400px;">
+    <form method="post" action="/login" class="mx-auto" style="max-width: 400px;" th:action="@{/login}">
       <div class="mb-3">
         <label for="username" class="form-label">ユーザー名</label>
         <input type="text" name="username" id="username" class="form-control" required>
