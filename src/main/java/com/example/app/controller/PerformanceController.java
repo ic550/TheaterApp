@@ -6,6 +6,7 @@ import java.util.List;
 
 import jakarta.validation.Valid;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -84,5 +85,32 @@ public class PerformanceController {
     public String delete(@PathVariable int id) {
         performanceService.deleteById(id);
         return "redirect:/performance/admin";
+    }
+    
+ // カレンダー表示
+    @GetMapping("/")
+    public String calendar() {
+        return "calendar";
+    }
+
+    // 日付を指定して一覧表示
+    @GetMapping("/performances")
+    public String showPerformances(@RequestParam("date")
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+        Model model, Authentication auth) {
+        
+        List<Performance> list = performanceService.findByDate(date);
+        model.addAttribute("performances", list);
+        model.addAttribute("selectedDate", date);
+        model.addAttribute("username", auth.getName());
+        return "performance-list";
+    }
+
+    // 公演詳細ページ
+    @GetMapping("/performances/{id}")
+    public String showDetail(@PathVariable("id") int id, Model model) {
+        Performance p = performanceService.findById(id);
+        model.addAttribute("performance", p);
+        return "performance-detail";
     }
 }
