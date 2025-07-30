@@ -12,13 +12,13 @@ public class LoginController {
         return "login";
     }
 
-    @GetMapping("/login-error")
+    @GetMapping("/login_error")
     public String loginError() {
-        return "login-error";
+        return "login_error";
     }
 
-    @GetMapping("/logout-success")
+    @GetMapping("/logout_success")
     public String logoutSuccess() {
-        return "logout-success";
+        return "logout_success";
     }
 }
