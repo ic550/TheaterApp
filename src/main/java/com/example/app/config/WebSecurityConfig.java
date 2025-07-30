@@ -32,7 +32,7 @@ public class WebSecurityConfig {
             )
             .formLogin(form -> form
                 .loginPage("/login")
-                .defaultSuccessUrl("/calendar", true)
+                .defaultSuccessUrl("/", true) // /calenderを削除
                 .failureUrl("/login_error")
                 .permitAll()
             )

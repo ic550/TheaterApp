@@ -28,7 +28,7 @@
     <div class="mt-4">
       <div th:if="${performance.youtubeUrl != null}">
         <iframe width="560" height="315"
-                th:src="'https://www.youtube.com/embed/' + ${#strings.substringAfter(performance.youtubeUrl, 'v=')}"
+                th:src="${#strings.substringAfter(performance.youtubeUrl, 'v=')}"
                 frameborder="0" allowfullscreen></iframe>
       </div>
       <div th:if="${performance.youtubeUrl == null}">
