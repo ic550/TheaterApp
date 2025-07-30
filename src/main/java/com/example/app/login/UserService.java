@@ -1,6 +1,6 @@
-// src/main/java/com/example/app/login/UserService.java
 package com.example.app.login;
 
+import org.springframework.security.core.userdetails.User; // ←追加
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
