@@ -11,17 +11,15 @@
     <h2 class="text-success mb-4" th:text="${performance.title}">公演タイトル</h2>
 
     <!-- お気に入りボタン：ログインユーザーのみ表示 -->
-    <div th:if="${loginStatus.loggedIn}">
-      <form th:action="@{${isFavorited} ? '/favorite/remove/' + ${performance.id} : '/favorite/add/' + ${performance.id}}" method="post">
-        <input type="hidden" name="_csrf" th:value="${_csrf.token}" /> <!-- CSRF対策 -->
-        <button type="submit"
-                class="btn mb-4"
-                th:classappend="${isFavorited} ? 'btn-danger' : 'btn-outline-success'">
-          <i class="bi" th:classappend="${isFavorited} ? 'bi-heart-fill' : 'bi-heart'"></i>
-          <span th:text="${isFavorited} ? ' お気に入り解除' : ' お気に入り登録'"></span>
-        </button>
-      </form>
-    </div>
+	<!-- お気に入り登録ボタン -->
+	<div th:if="${loginStatus.loggedIn} and ${loginStatus.role} == 'USER'">
+	    <form method="post" th:action="@{/favorite/toggle}">
+	        <input type="hidden" name="performanceId" th:value="${performance.id}" />
+	        <button type="submit" class="btn btn-outline-success">
+	            <span th:text="${isFavorited} ? 'お気に入り解除' : 'お気に入り登録'"></span>
+	        </button>
+	    </form>
+	</div>
 
     <p><strong>劇場:</strong> <span th:text="${performance.theater}">劇場名</span></p>
     <p><strong>日付:</strong> <span th:text="${performance.date}">YYYY-MM-DD</span></p>
@@ -40,13 +38,6 @@
     </div>
   </div>
   
-<!--  テスト-->
-<div>
-  <form th:action="@{'/favorite/add/' + ${performance.id}}" method="post">
-    <button type="submit" class="btn btn-outline-success">お気に入り登録</button>
-  </form>
-</div>
-<!--テスト終-->
 
   <!-- Bootstrap Icons CDN（ハートアイコン用）-->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">

@@ -30,4 +30,5 @@ public class FavoriteService {
     public List<Favorite> getFavoritesByUser(int userId) {
         return favoriteMapper.findByUserId(userId);
     }
+    
 }
