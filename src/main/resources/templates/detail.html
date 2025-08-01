@@ -12,7 +12,7 @@
 
     <!-- お気に入りボタン：ログインユーザーのみ表示 -->
 	<!-- お気に入り登録ボタン -->
-	<div th:if="${loginStatus.loggedIn} and ${loginStatus.role} == 'USER'">
+	<div th:if="${loginStatus.loggedIn and loginStatus.role == 'USER'}">
 	    <form method="post" th:action="@{/favorite/toggle}">
 	        <input type="hidden" name="performanceId" th:value="${performance.id}" />
 	        <button type="submit" class="btn btn-outline-success">
