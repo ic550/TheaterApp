@@ -91,19 +91,40 @@ public class PerformanceController {
         return "calendar";
     }
 
-    @GetMapping("/detail/{id}")
-    public String detail(@PathVariable int id, Model model) {
-        Performance perf = performanceService.getById(id);
-        model.addAttribute("performance", perf);
-        
-        model.addAttribute("loginStatus", loginStatus);  // ← 追加
 
+    @GetMapping("/detail/{id}")
+    public String showDetail(@PathVariable("id") int id, Model model) {
+        Performance performance = performanceService.findById(id);
+        model.addAttribute("performance", performance);
+        
+        // TODO 消す
+        System.out.println("LoginStatus: loggedIn=" + loginStatus.isLoggedIn() + ", id=" + loginStatus.getId());
+        
+        // ★ LoginStatusがログイン済みかを確認
         if (loginStatus.isLoggedIn()) {
-            boolean isFav = favoriteService.isFavorited(loginStatus.getId(), id);
-            model.addAttribute("isFavorited", isFav);
+            boolean isFavorited = favoriteService.isFavorited(loginStatus.getId(), id);
+            model.addAttribute("isFavorited", isFavorited);
         }
 
-        return "detail";
+        // ★ loginStatus をモデルに渡す（Thymeleaf用）
+        model.addAttribute("loginStatus", loginStatus);
+        // お気に入り済かどうかも渡す（ログイン中のみ）
+        boolean isFavorited = false;
+        if (loginStatus.isLoggedIn()) {
+            isFavorited = favoriteService.isFavorited(loginStatus.getId(), id);
+        }
+        model.addAttribute("isFavorited", isFavorited);
+        return "detail"; // templates/detail.html を返す
+    }
+    
+    @GetMapping("/login_error")
+    public String loginError() {
+        return "login_error";
+    }
+
+    @GetMapping("/logout_success")
+    public String logoutSuccess() {
+        return "logout_success";
     }
 
 }

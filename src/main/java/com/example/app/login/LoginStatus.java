@@ -6,8 +6,13 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.annotation.SessionScope;
 
+import lombok.Data;
+
+@Data
 @Component
+@SessionScope
 @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class LoginStatus implements Serializable {
 
@@ -16,6 +21,8 @@ public class LoginStatus implements Serializable {
     private Integer id;
     private String name;
     private boolean isAdmin;
+    private boolean loggedIn;
+    private String role;
 
     // ゲッター・セッター
     public Integer getId() {

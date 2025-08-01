@@ -42,4 +42,8 @@ public class PerformanceService {
     public List<Performance> getAll() {
         return performanceMapper.findAll();
     }
+    
+    public Performance findById(int id) {
+        return performanceMapper.findById(id);
+    }
 }
