@@ -43,7 +43,15 @@ public class PerformanceService {
         return performanceMapper.findAll();
     }
     
-    public Performance findById(int id) {
+    public Performance findByIds(int id) {
         return performanceMapper.findById(id);
+    }
+    
+    // IDのリストから該当するPerformanceを取得
+    public List<Performance> findByIds(List<Integer> ids) {
+        if (ids == null || ids.isEmpty()) {
+            return List.of(); // 空リストを返す
+        }
+        return performanceMapper.findByIds(ids);
     }
 }

@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.example.app.domain.Performance;
 
@@ -16,4 +17,8 @@ public interface PerformanceMapper {
     void update(Performance performance);
     void deleteById(int id);
     List<Performance> findAll();
+    
+   
+    List<Performance> findByIds(@Param("ids") List<Integer> ids);
+
 }

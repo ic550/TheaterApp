@@ -43,4 +43,12 @@
     DELETE FROM performances WHERE id = #{id}
   </delete>
 
+<select id="findByIds" parameterType="list" resultType="com.example.app.domain.Performance">
+    SELECT * FROM performances
+    WHERE id IN
+    <foreach item="id" collection="list" open="(" separator="," close=")">
+      #{id}
+    </foreach>
+  </select>
+
 </mapper>

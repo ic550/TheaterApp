@@ -94,7 +94,7 @@ public class PerformanceController {
 
     @GetMapping("/detail/{id}")
     public String showDetail(@PathVariable("id") int id, Model model) {
-        Performance performance = performanceService.findById(id);
+        Performance performance = performanceService.findByIds(id);
         model.addAttribute("performance", performance);
         
         // TODO 消す

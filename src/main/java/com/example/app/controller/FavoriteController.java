@@ -1,34 +1,42 @@
 package com.example.app.controller;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import com.example.app.login.LoginStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import com.example.app.domain.Favorite;
+import com.example.app.domain.LoginUser;
+import com.example.app.domain.Performance;
 import com.example.app.service.FavoriteService;
+import com.example.app.service.PerformanceService;
 
 import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/favorite")
 public class FavoriteController {
 
     private final FavoriteService favoriteService;
-    private final LoginStatus loginStatus;
+    private final PerformanceService performanceService;
 
-    @PostMapping("/add/{performanceId}")
-    public String addFavorite(@PathVariable int performanceId) {
-        int userId = loginStatus.getId();
-        favoriteService.addFavorite(userId, performanceId);
-        return "redirect:/performance/detail/" + performanceId;
-    }
+    @GetMapping("/favorite/list")
+    public String showFavorites(@AuthenticationPrincipal LoginUser loginUser, Model model) {
+        int userId = loginUser.getUser().getId();
 
-    @PostMapping("/remove/{performanceId}")
-    public String removeFavorite(@PathVariable int performanceId) {
-        int userId = loginStatus.getId();
-        favoriteService.removeFavorite(userId, performanceId);
-        return "redirect:/performance/detail/" + performanceId;
+        // お気に入りPerformance ID取得
+        List<Favorite> favorites = favoriteService.getFavoritesByUser(userId);
+        List<Integer> performanceIds = favorites.stream()
+                .map(Favorite::getPerformanceId)
+                .collect(Collectors.toList());
+
+        // Performance情報取得
+        List<Performance> performanceList = performanceService.findByIds(performanceIds);
+
+        model.addAttribute("favorites", performanceList);
+        return "favorite/list";
     }
 }

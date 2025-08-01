@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>お気に入り一覧</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body class="bg-dark text-white">
+
+<div class="container mt-4">
+    <h2 class="text-success">お気に入り公演一覧</h2>
+
+    <div th:if="${favorites.isEmpty()}" class="mt-3">
+        <p>お気に入りは登録されていません。</p>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mt-3" th:if="${not favorites.isEmpty()}">
+        <div class="col" th:each="perf : ${favorites}">
+            <div class="card bg-secondary h-100">
+                <div class="card-body">
+                    <h5 class="card-title text-light" th:text="${perf.title}">公演タイトル</h5>
+                    <p class="card-text text-light" th:text="'日付: ' + ${perf.date}">日付</p>
+                    <p class="card-text text-light" th:text="'主演: ' + ${perf.leadActor}">主演</p>
+                </div>
+                <div class="card-footer">
+                    <form th:action="@{'/favorite/remove/' + ${perf.id}}" method="post">
+                        <button type="submit" class="btn btn-warning w-100">お気に入り解除</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a th:href="@{/performance/list}" class="btn btn-outline-light">公演一覧へ戻る</a>
+    </div>
+</div>
+
+</body>
+</html>
