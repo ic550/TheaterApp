@@ -11,7 +11,7 @@
     <h2 class="text-success">[[${date}]] の公演一覧</h2>
     <div class="list-group mt-3">
       <div th:each="perf : ${performances}" class="list-group-item bg-secondary text-white mb-2">
-        <h4 th:text="${perf.title} + '（' + perf.time + '）'"></h4>
+        <h4 th:text="${perf.title} + '（' + ${perf.time} + '）'"></h4>
         <p th:text="${perf.theater} + ' / ' + ${perf.cast}"></p>
         <a th:href="@{'/performance/detail/' + ${perf.id}}" class="btn btn-success">詳細を見る</a>
       </div>
