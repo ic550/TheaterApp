@@ -43,4 +43,15 @@ public class FavoriteServiceImpl implements FavoriteService {
         return performanceMapper.findByIds(ids);
     }
 
+    public void toggleFavorite(int userId, int performanceId) {
+        Favorite existing = favoriteMapper.findByUserIdAndPerformanceId(userId, performanceId);
+        if (existing != null) {
+            favoriteMapper.deleteByUserIdAndPerformanceId(userId, performanceId);
+        } else {
+            Favorite newFavorite = new Favorite();
+            newFavorite.setUserId(userId);
+            newFavorite.setPerformanceId(performanceId);
+            favoriteMapper.insert(newFavorite);
+        }
+    }
 }

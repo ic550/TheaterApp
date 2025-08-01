@@ -28,4 +28,10 @@ public interface FavoriteMapper {
 
     @Select("SELECT COUNT(*) > 0 FROM favorites WHERE user_id = #{userId} AND performance_id = #{performanceId}")
     boolean isFavorited(@Param("userId") int userId, @Param("performanceId") int performanceId);
+    
+    Favorite findByUserIdAndPerformanceId(int userId, int performanceId);
+
+    void deleteByUserIdAndPerformanceId(int userId, int performanceId);
+
+    void insert(Favorite favorite);
 }
