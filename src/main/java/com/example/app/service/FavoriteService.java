@@ -11,5 +11,5 @@ public interface FavoriteService {
     boolean isFavorited(int userId, int performanceId);
     List<Favorite> getFavoritesByUser(int userId);
     List<Performance> findByIds(List<Integer> ids);
-
+    void toggleFavorite(int userId, int performanceId);
 }

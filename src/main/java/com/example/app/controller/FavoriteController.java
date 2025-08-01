@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.app.domain.Favorite;
@@ -47,7 +46,6 @@ public class FavoriteController {
 
     // お気に入り登録・解除（トグル）
     @PostMapping("/toggle")
-    @ResponseBody
     public String toggleFavorite(
     	    @RequestParam("performanceId") int performanceId,
     	    @AuthenticationPrincipal LoginUser loginUser,

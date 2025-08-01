@@ -101,10 +101,7 @@ public class PerformanceController {
         System.out.println("LoginStatus: loggedIn=" + loginStatus.isLoggedIn() + ", id=" + loginStatus.getId());
         
         // ★ LoginStatusがログイン済みかを確認
-        if (loginStatus.isLoggedIn()) {
-            boolean isFavorited = favoriteService.isFavorited(loginStatus.getId(), id);
-            model.addAttribute("isFavorited", isFavorited);
-        }
+        
 
         // ★ loginStatus をモデルに渡す（Thymeleaf用）
         model.addAttribute("loginStatus", loginStatus);
