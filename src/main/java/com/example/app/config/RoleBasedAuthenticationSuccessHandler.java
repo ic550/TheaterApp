@@ -12,8 +12,16 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
-@Component
+import com.example.app.login.LoginStatus;
+import com.example.app.login.User;
+
+import lombok.RequiredArgsConstructor;
+
+@Component("roleBasedAuthenticationSuccessHandler")
+@RequiredArgsConstructor
 public class RoleBasedAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+
+    private final LoginStatus loginStatus;
 
     @Override
     public void onAuthenticationSuccess(
@@ -21,22 +29,30 @@ public class RoleBasedAuthenticationSuccessHandler implements AuthenticationSucc
             HttpServletResponse response,
             Authentication authentication) throws IOException, ServletException {
 
-        // ユーザーの役割（権限）を取得
+        // ユーザー情報を取得（UserDetails のサブクラスならキャスト）
+        User user = (User) authentication.getPrincipal(); // ← ここ重要
+
+        // loginStatus にユーザー情報をセット
+        loginStatus.setId(user.getId());
+        loginStatus.setName(user.getUsername());
+        loginStatus.setAdmin(user.getRole().equals("ADMIN"));
+        loginStatus.setRole(user.getRole());
+
+        // 権限に基づいてリダイレクト
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
         for (GrantedAuthority authority : authorities) {
             String role = authority.getAuthority();
 
             if (role.equals("ROLE_ADMIN")) {
-                response.sendRedirect("/admin"); // 管理者ページ
+                response.sendRedirect("/admin");
                 return;
             } else if (role.equals("ROLE_USER")) {
-                response.sendRedirect("/calendar"); // 一般ユーザー向けページ
+                response.sendRedirect("/calendar");
                 return;
             }
         }
 
-        // ロールが判別できなかった場合
         response.sendRedirect("/");
     }
 }
