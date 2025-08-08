@@ -21,7 +21,7 @@ public class LoginStatus implements Serializable {
     private Integer id;
     private String name;
     private boolean isAdmin;
-    private boolean loggedIn;
+//    private boolean loggedIn;
     private String role;
 
     // ゲッター・セッター
