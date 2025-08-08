@@ -38,7 +38,6 @@ src/
 │   │   ├── login/
 │   ├── resources/
 │   │   ├── static/
-│   │   │   ├── css/
 │   │   │   ├── images/
 │   │   ├── templates/
 │   │   │   ├── calendar.html
