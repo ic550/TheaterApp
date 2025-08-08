@@ -1,0 +1,68 @@
+<!-- src/main/resources/templates/calendar.html -->
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>カレンダー</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+	<!--	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>-->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/darkly/bootstrap.min.css">
+	<style>
+		.logo {
+			transition: transform 0.3s ease, filter 0.3s ease;
+		}
+
+		.logo:hover {
+			transform: scale(1.05);
+			filter: brightness(1.2);
+		}
+	</style>
+</head>
+
+<body class="bg-dark text-white">
+	<!-- ロゴ表示 -->
+	<div class="text-start p-3">
+		<img th:src="@{/images/gekijounavi3.png}" alt="劇場ナビ ロゴ" class="logo logo-mask"
+			style="width: 200px; height: 200px;">
+	</div>
+	<div class="container mt-5 text-center">
+		<h2 class="text-success">カレンダーから公演検索</h2>
+		<input type="date" id="selectedDate" class="form-control w-50 mx-auto mt-3">
+		<button class="btn btn-success mt-3" onclick="loadPerformances()">検索</button>
+	</div>
+	<br />
+	<br />
+	<br />
+	<div class="text-end mb-3">
+		<a href="/favorite/list" class="btn btn-success">
+			お気に入り一覧を見る
+		</a>
+	</div>
+	<div th:if="${favoritePerformances != null}">
+		<h3 class="text-success">お気に入りの公演</h3>
+		<ul class="list-group">
+			<li class="list-group-item bg-dark text-white" th:each="perf : ${favoritePerformances}">
+				<a th:href="@{'/performance/detail/' + ${perf.id}}" th:text="${perf.title}">公演タイトル</a>
+				<span th:text="${perf.date}">日付</span>
+			</li>
+		</ul>
+	</div>
+
+
+	<a href="/login" class="btn btn-secondary">ログインへ戻る</a>
+
+	<form th:action="@{/logout}" method="post">
+		<button type="submit" class="btn btn-danger">ログアウト</button>
+	</form>
+
+	<script>
+		function loadPerformances() {
+			const date = document.getElementById('selectedDate').value;
+			if (!date) return alert("日付を選択してください。");
+			window.location.href = `/performance/list?date=${date}`;
+		}
+	</script>
+</body>
+
+</html>

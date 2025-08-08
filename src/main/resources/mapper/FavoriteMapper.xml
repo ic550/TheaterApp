@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.app.mapper.FavoriteMapper">
+
+    <!-- 追加 -->
+    <insert id="insertFavorite" useGeneratedKeys="true" keyProperty="id">
+    	INSERT INTO favorites (user_id, performance_id)
+    	VALUES (#{userId}, #{performanceId})
+	</insert>
+
+
+    <!-- 取得 -->
+    <select id="selectFavoritesByUserId" resultType="com.example.app.domain.Performance">
+        SELECT p.*
+        FROM performances p
+        JOIN favorites f ON p.id = f.performance_id
+        WHERE f.user_id = #{userId}
+    </select>
+
+    <!-- 削除 -->
+    <delete id="deleteFavorite">
+        DELETE FROM favorites
+        WHERE user_id = #{userId} AND performance_id = #{performanceId}
+    </delete>
+
+    <!-- 登録済みか確認 -->
+    <select id="existsFavorite" resultType="boolean">
+        SELECT EXISTS (
+            SELECT 1 FROM favorites
+            WHERE user_id = #{userId} AND performance_id = #{performanceId}
+        )
+    </select>
+    
+    <select id="exists" resultType="boolean">
+    	SELECT EXISTS (
+        	SELECT 1 FROM favorites
+        	WHERE user_id = #{userId} AND performance_id = #{performanceId}
+    	)
+	</select>
+    
+    <select id="getPerformanceById" resultType="com.example.app.domain.Performance">
+    	SELECT * FROM performances WHERE id = #{id}
+	</select>
+
+</mapper>

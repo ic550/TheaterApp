@@ -1,0 +1,65 @@
+<!-- src/main/resources/templates/detail.html -->
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>公演詳細</title>
+	<!--	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">-->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/darkly/bootstrap.min.css">
+</head>
+
+<body class="bg-dark text-white">
+	<!-- ロゴ表示 -->
+	<div class="text-start p-3">
+		<img th:src="@{/images/gekijounavi3.png}" alt="劇場ナビ ロゴ" class="logo logo-mask"
+			style="width: 100px; height: 100px;">
+	</div>
+	<div class="container mt-5">
+		<h2 class="text-success mb-4" th:text="${performance.title}">公演タイトル</h2>
+
+		<!-- お気に入りボタン：ログインユーザーのみ表示 -->
+		<!-- お気に入り登録ボタン -->
+		<div th:if="${loginStatus.loggedIn and loginStatus.role == 'USER'}">
+			<!--	    <form method="post" th:action="@{/favorite/toggle}">-->
+			<!--	        <input type="hidden" name="performanceId" th:value="${performance.id}" />-->
+			<!--	        <button type="submit" class="btn btn-outline-success">-->
+			<!--	            <span th:text="${isFavorited} ? 'お気に入り解除' : 'お気に入り登録'"></span>-->
+			<!--	        </button>-->
+			<!--	    </form>-->
+			<form th:action="@{/favorite/toggle}" method="post">
+				<input type="hidden" name="performanceId" th:value="${performance.id}" />
+				<input type="hidden" name="redirectUrl" th:value="@{'/performance/detail/' + ${performance.id}}" />
+				<button type="submit" class="btn btn-warning w-100" th:text="${isFavorited} ? 'お気に入り解除' : 'お気に入り登録'">
+					お気に入り
+				</button>
+			</form>
+		</div>
+
+		<p><strong>劇場:</strong> <span th:text="${performance.theater}">劇場名</span></p>
+		<p><strong>日付:</strong> <span th:text="${performance.date}">YYYY-MM-DD</span></p>
+		<p><strong>時間:</strong> <span th:text="${performance.time}">HH:mm</span></p>
+		<p><strong>出演:</strong> <span th:text="${performance.cast}">配役</span></p>
+
+		<div class="mt-4">
+			<div th:if="${performance.youtubeUrl != null}">
+				<iframe th:src="${performance.youtubeUrl}" width="560" height="315" frameborder="0"
+					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+					allowfullscreen>
+				</iframe>
+			</div>
+			<div th:if="${performance.youtubeUrl == null}">
+				<p class="text-warning">予告動画はありません。</p>
+			</div>
+		</div>
+
+	</div>
+
+	<a href="/calendar" class="btn btn-secondary">検索へ戻る</a>
+	<form th:action="@{/logout}" method="post">
+		<button type="submit" class="btn btn-danger">ログアウト</button>
+	</form>
+
+</body>
+
+</html>

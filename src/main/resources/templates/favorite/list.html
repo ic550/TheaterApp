@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+
+<head>
+	<meta charset="UTF-8">
+	<title>お気に入り一覧</title>
+<!--	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">-->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/darkly/bootstrap.min.css">
+</head>
+
+<body class="bg-dark text-white">
+
+	<div class="container mt-4">
+		<h2 class="text-success">お気に入り公演一覧</h2>
+
+		<div th:if="${favorites.isEmpty()}" class="mt-3">
+			<p>お気に入りは登録されていません。</p>
+		</div>
+
+		<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mt-3" th:if="${not favorites.isEmpty()}">
+			<div class="col" th:each="perf : ${favorites}">
+				<div class="card bg-secondary h-100">
+					<div class="card-body">
+						<h5 class="card-title text-light" th:text="${perf.title} + '（' + ${perf.time} + '）'">公演タイトル</h5>
+						<p class="card-text text-light" th:text="'日付: ' + ${#temporals.format(perf.date, 'yyyy年M月d日')}">
+							日付</p>
+						<p class="card-text text-light" th:text="'主演: ' + ${perf.cast}">主演</p>
+						<a th:href="@{'/performance/detail/' + ${perf.id}}" class="btn btn-success">詳細を見る</a>
+					</div>
+					<div class="card-footer">
+						<form th:action="@{'/favorite/remove/' + ${perf.id}}" method="post">
+							<button type="submit" class="btn btn-warning w-100">お気に入り解除</button>
+						</form>
+						<!--					<form th:action="@{'/favorite/remove/' + ${perf.id}}" method="post">-->
+						<!--					    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
+						<!--					    <button type="submit" class="btn btn-warning w-100">お気に入り解除</button>-->
+						<!--					</form>-->
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="mt-4">
+			<a th:href="@{/calendar(date=${today})}" class="btn btn-outline-light">カレンダーへ戻る</a>
+		</div>
+		<form th:action="@{/logout}" method="post">
+			<button type="submit" class="btn btn-danger">ログアウト</button>
+		</form>
+	</div>
+
+</body>
+
+</html>

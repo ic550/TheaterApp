@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.app.mapper.PerformanceMapper">
+
+    <!-- 公演一覧：日付で取得 -->
+    <select id="findByDate"
+        resultType="com.example.app.domain.Performance">
+        SELECT id, title, theater, date, time, cast, youtube_url AS youtubeUrl
+        FROM performances 
+        WHERE date = #{date} 
+        ORDER BY time
+    </select>
+
+    <!-- 公演1件：IDで取得 -->
+    <select id="findById"
+        resultType="com.example.app.domain.Performance">
+        SELECT id, title, theater, date, time, cast, youtube_url AS youtubeUrl
+        FROM performances 
+        WHERE id = #{id}
+    </select>
+
+    <!-- 公演全件取得（管理画面） -->
+    <select id="findAll"
+        resultType="com.example.app.domain.Performance">
+        SELECT id, title, theater, date, time, cast, youtube_url AS youtubeUrl
+        FROM performances
+        ORDER BY date, time
+    </select>
+
+    <!-- 公演登録 -->
+    <insert id="insert"
+        parameterType="com.example.app.domain.Performance"
+        useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO performances (title, theater, date, time, cast, youtube_url)
+        VALUES (#{title}, #{theater}, #{date}, #{time}, #{cast}, #{youtubeUrl})
+    </insert>
+
+    <!-- 公演更新 -->
+    <update id="update"
+        parameterType="com.example.app.domain.Performance">
+        UPDATE performances
+        SET title = #{title},
+            theater = #{theater},
+            date = #{date},
+            time = #{time},
+            cast = #{cast},
+            youtube_url = #{youtubeUrl}
+        WHERE id = #{id}
+    </update>
+
+    <!-- 公演削除 -->
+    <delete id="deleteById" parameterType="int">
+        DELETE FROM performances
+        WHERE id = #{id}
+    </delete>
+
+    <!-- 複数IDで取得 -->
+    <select id="findByIds" parameterType="list"
+        resultType="com.example.app.domain.Performance">
+        SELECT id, title, theater, date, time, cast, youtube_url AS youtubeUrl
+        FROM performances
+        WHERE id IN
+        <foreach item="id" collection="list" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <!-- 既にあるgetPerformanceByIdも同様に -->
+    <select id="getPerformanceById"
+        resultType="com.example.app.domain.Performance">
+        SELECT id, title, theater, date, time, cast, youtube_url AS youtubeUrl
+        FROM performances
+        WHERE id = #{id}
+    </select>
+
+</mapper>
